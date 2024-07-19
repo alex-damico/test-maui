@@ -11,7 +11,12 @@ window.initializeScroll = (dotNetRef) => {
     const urlParams = new URLSearchParams(window.location.search);
     const scrollPosition = urlParams.get('scrollPosition');
     if (scrollPosition) {
-        window.scrollTo(0, parseInt(scrollPosition, 10));
+        // window.scrollTo(0, parseInt(scrollPosition, 10));
+        window.scrollTo({
+            top: scrollPosition,
+            left: 0,
+            behavior: "instant",
+        });
     }
 };
 
