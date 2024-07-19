@@ -1,0 +1,93 @@
+@page "/articles"
+@implements IDisposable
+
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<h3>Articles</h3>
+
+<div id="articles-container" @ref="articleContainerRef">
+    @foreach (var article in articles)
+    {
+        <div @onclick="() => ViewDetails(article.Id)" class="article @(!isLoadingInitial ? "loaded" : "")">
+            @article.Id + @article.Name
+        </div>
+    }
+</div>
+<div id="load-more-trigger"></div>
+
+@code {
+    private ElementReference articleContainerRef;
+    private List<Article> articles = new();
+    private int currentPage = 1;
+    private DotNetObjectReference<ArticleList> dotNetRef;
+    private IJSObjectReference? _module;
+    
+    private bool isLoadingInitial = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var parameter = Navigation.ToAbsoluteUri(Navigation.Uri).Query;
+        var idArticle = System.Web.HttpUtility.ParseQueryString(parameter).Get("id");
+        int? id = Int32.TryParse(idArticle, out var tempVal) ? tempVal : null;
+
+        await LoadArticles(currentPage, id);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _module = await JS.InvokeAsync<IJSObjectReference>("import", "./Pages/Routing1/ArticleList.razor.js");
+            dotNetRef = DotNetObjectReference.Create(this);
+            await JS.InvokeVoidAsync("initializeScroll", dotNetRef);
+            
+            isLoadingInitial = false;
+            StateHasChanged();
+        }
+    }
+
+    [JSInvokable]
+    public async Task LoadMoreArticles()
+    {
+        currentPage++;
+        await LoadArticles(currentPage);
+
+        StateHasChanged();
+    }
+
+    private async Task LoadArticles(int page, int? idArticle = null)
+    {
+        // Simulate an API call
+        var newArticles = await FetchArticles(page, idArticle);
+        articles.AddRange(newArticles);
+    }
+
+    private Task<List<Article>> FetchArticles(int page, int? idArticle = null)
+    {
+        // Replace this with actual API call
+        var index = articles.Count;
+        var listArticles = new List<Article>();
+        var limit = idArticle.HasValue ? (((idArticle - 1) / 50) + 1) * 50 : 50;
+        for (int i = 0; i < limit; i++)
+        {
+            listArticles.Add(new Article { Id = (index + i), Name = "Article page: " + (page * 1) });
+        }
+
+        return Task.FromResult(listArticles);
+    }
+
+    private async void ViewDetails(int articleId)
+    {
+        // Save scroll position and navigate to details page
+        var scrollPosition = await JS.InvokeAsync<double>("getScrollPosition");
+        Navigation.NavigateTo($"/article-details/{articleId}?scrollPosition={scrollPosition}");
+    }
+
+    public void Dispose()
+    {
+        _module?.DisposeAsync();
+        dotNetRef?.Dispose();
+    }
+
+}

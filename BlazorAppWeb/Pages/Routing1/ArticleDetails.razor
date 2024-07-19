@@ -1,0 +1,26 @@
+@page "/article-details/{Id:int}"
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<h3>Article Details</h3>
+
+<p>@article.Name</p>
+<button @onclick="GoBack">Back</button>
+
+@code {
+    [Parameter] public int Id { get; set; }
+    private Article article = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate fetching article details
+        article = new Article { Id = Id, Name = "Article " + Id };
+    }
+
+    private void GoBack()
+    {
+        var scrollPosition = Navigation.ToAbsoluteUri(Navigation.Uri).Query;
+        var position = System.Web.HttpUtility.ParseQueryString(scrollPosition).Get("scrollPosition");
+        Navigation.NavigateTo($"/articles?id={Id}&scrollPosition={position}");
+    }
+}
