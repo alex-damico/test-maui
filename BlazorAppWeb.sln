@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorAppWeb", "BlazorAppWeb\BlazorAppWeb.csproj", "{D9324F74-F917-444C-8DAF-3C2325968218}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MauiAppMobile", "MauiAppMobile\MauiAppMobile.csproj", "{5933DC17-78AC-46B9-9C48-3192CBD7C5D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{D9324F74-F917-444C-8DAF-3C2325968218}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D9324F74-F917-444C-8DAF-3C2325968218}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D9324F74-F917-444C-8DAF-3C2325968218}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5933DC17-78AC-46B9-9C48-3192CBD7C5D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5933DC17-78AC-46B9-9C48-3192CBD7C5D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5933DC17-78AC-46B9-9C48-3192CBD7C5D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5933DC17-78AC-46B9-9C48-3192CBD7C5D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
